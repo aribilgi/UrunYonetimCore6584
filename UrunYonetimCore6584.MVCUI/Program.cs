@@ -1,7 +1,21 @@
+using UrunYonetimCore6584.Data;
+using UrunYonetimCore6584.Service.Abstract;
+using UrunYonetimCore6584.Service.Concrete;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<DatabaseContext>();
+
+builder.Services.AddTransient(typeof(IService<>), typeof(Service<>)); // veritabaný iþlerini yapacak olan yazdýðýmýz servisi uygulamaya tanýttýk
+// Uygulamaya Servis eklemede 3 farklý yöntem var
+/*
+ * builder.Services.AddTransient : Bu yöntem eðer kullanýmda nesne varsa onu kullanýr yoksa yeni nesne oluþturur.
+ * builder.Services.AddSingleton : Bu yöntem uygulama çalýþtýðýnda nesneyi 1 kez oluþturur ve her istekte ayný nesneyi döndürür
+ * builder.Services.AddScoped : Bu yöntemde servise gelen her istekte yeni nesne oluþturulur
+ * */
 
 var app = builder.Build();
 
@@ -19,6 +33,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+            name: "admin",
+            pattern: "{area:exists}/{controller=Main}/{action=Index}/{id?}"
+          );
 
 app.MapControllerRoute(
     name: "default",

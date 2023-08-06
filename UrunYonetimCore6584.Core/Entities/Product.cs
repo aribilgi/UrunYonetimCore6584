@@ -6,7 +6,7 @@ namespace UrunYonetimCore6584.Core.Entities
     public class Product : IEntity
     {
         public int Id { get; set; } // entityframework bu id değerini otomatik olarak primary key ve otomatik artan sayı olarak veritabanında ayarlayacak
-        [StringLength(50), DisplayName("Ürün Adı"), Required]
+        [DisplayName("Ürün Adı"), Required]
         public string Name { get; set; }
         [DisplayName("Açıklama")]
         public string? Description { get; set; }
@@ -20,11 +20,11 @@ namespace UrunYonetimCore6584.Core.Entities
         public int Stock { get; set; }
         [DisplayName("Ürün Fiyatı")]
         public decimal Price { get; set; }
-        [StringLength(100), DisplayName("Resim 1")]
+        [DisplayName("Resim 1")]
         public string? Image { get; set; }
-        [StringLength(100), DisplayName("Resim 2")]
+        [DisplayName("Resim 2")]
         public string? Image2 { get; set; }
-        [StringLength(100), DisplayName("Resim 3")]
+        [DisplayName("Resim 3")]
         public string? Image3 { get; set; }
         [DisplayName("Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime CreateDate { get; set; } = DateTime.Now;
