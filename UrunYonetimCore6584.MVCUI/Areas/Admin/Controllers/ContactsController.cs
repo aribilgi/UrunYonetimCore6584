@@ -1,53 +1,48 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UrunYonetimCore6584.Core.Entities;
-using UrunYonetimCore6584.MVCUI.Utils;
 using UrunYonetimCore6584.Service.Abstract;
 
 namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BrandsController : Controller
+    public class ContactsController : Controller
     {
-        private readonly IService<Brand> _service;
+        private readonly IService<Contact> _service;
 
-        public BrandsController(IService<Brand> service)
+        public ContactsController(IService<Contact> service)
         {
             _service = service;
         }
 
-        // GET: BrandsController
+        // GET: ContactsController
         public ActionResult Index()
         {
             var model = _service.GetAll();
             return View(model);
         }
 
-        // GET: BrandsController/Details/5
+        // GET: ContactsController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: BrandsController/Create
+        // GET: ContactsController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: BrandsController/Create
+        // POST: ContactsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Brand collection, IFormFile? Logo)
+        public ActionResult Create(Contact collection)
         {
             try
             {
-                if (Logo is not null)
-                {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
-                }
-                await _service.AddAsync(collection);
-                await _service.SaveAsync();
+                _service.Add(collection);
+                _service.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -56,26 +51,22 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Edit/5
+        // GET: ContactsController/Edit/5
         public ActionResult Edit(int id)
         {
             var model = _service.Find(id);
             return View(model);
         }
 
-        // POST: BrandsController/Edit/5
+        // POST: ContactsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Brand collection, IFormFile? Logo)
+        public ActionResult Edit(int id, Contact collection)
         {
             try
             {
-                if (Logo is not null)
-                {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
-                }
                 _service.Update(collection);
-                await _service.SaveAsync();
+                _service.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -84,17 +75,17 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Delete/5
+        // GET: ContactsController/Delete/5
         public ActionResult Delete(int id)
         {
             var model = _service.Find(id);
             return View(model);
         }
 
-        // POST: BrandsController/Delete/5
+        // POST: ContactsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Brand collection)
+        public ActionResult Delete(int id, Contact collection)
         {
             try
             {

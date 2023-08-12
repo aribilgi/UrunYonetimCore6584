@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UrunYonetimCore6584.Core.Entities;
 using UrunYonetimCore6584.MVCUI.Utils;
 using UrunYonetimCore6584.Service.Abstract;
@@ -7,44 +6,44 @@ using UrunYonetimCore6584.Service.Abstract;
 namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BrandsController : Controller
+    public class CategoriesController : Controller
     {
-        private readonly IService<Brand> _service;
+        private readonly IService<Category> _service;
 
-        public BrandsController(IService<Brand> service)
+        public CategoriesController(IService<Category> service)
         {
             _service = service;
         }
 
-        // GET: BrandsController
+        // GET: CategoriesController
         public ActionResult Index()
         {
             var model = _service.GetAll();
             return View(model);
         }
 
-        // GET: BrandsController/Details/5
+        // GET: CategoriesController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: BrandsController/Create
+        // GET: CategoriesController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: BrandsController/Create
+        // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Brand collection, IFormFile? Logo)
+        public async Task<ActionResult> CreateAsync(Category collection, IFormFile? Image)
         {
             try
             {
-                if (Logo is not null)
+                if (Image is not null)
                 {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
+                    collection.Image = await FileHelper.FileLoaderAsync(Image);
                 }
                 await _service.AddAsync(collection);
                 await _service.SaveAsync();
@@ -56,23 +55,23 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: CategoriesController/Edit/5
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _service.FindAsync(id);
             return View(model);
         }
 
-        // POST: BrandsController/Edit/5
+        // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Brand collection, IFormFile? Logo)
+        public async Task<ActionResult> EditAsync(int id, Category collection, IFormFile? Image)
         {
             try
             {
-                if (Logo is not null)
+                if (Image is not null)
                 {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
+                    collection.Image = await FileHelper.FileLoaderAsync(Image);
                 }
                 _service.Update(collection);
                 await _service.SaveAsync();
@@ -84,17 +83,17 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: CategoriesController/Delete/5
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _service.FindAsync(id);
             return View(model);
         }
 
-        // POST: BrandsController/Delete/5
+        // POST: CategoriesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Brand collection)
+        public ActionResult Delete(int id, Category collection)
         {
             try
             {

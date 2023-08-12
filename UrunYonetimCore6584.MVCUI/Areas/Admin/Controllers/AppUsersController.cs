@@ -1,51 +1,45 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UrunYonetimCore6584.Core.Entities;
-using UrunYonetimCore6584.MVCUI.Utils;
 using UrunYonetimCore6584.Service.Abstract;
 
 namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BrandsController : Controller
+    public class AppUsersController : Controller
     {
-        private readonly IService<Brand> _service;
+        private readonly IService<AppUser> _service;
 
-        public BrandsController(IService<Brand> service)
+        public AppUsersController(IService<AppUser> service)
         {
             _service = service;
         }
 
-        // GET: BrandsController
-        public ActionResult Index()
+        // GET: AppUsersController
+        public async Task<ActionResult> Index()
         {
-            var model = _service.GetAll();
+            var model = await _service.GetAllAsync();
             return View(model);
         }
 
-        // GET: BrandsController/Details/5
+        // GET: AppUsersController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: BrandsController/Create
+        // GET: AppUsersController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: BrandsController/Create
+        // POST: AppUsersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Brand collection, IFormFile? Logo)
+        public async Task<ActionResult> CreateAsync(AppUser collection)
         {
             try
             {
-                if (Logo is not null)
-                {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
-                }
                 await _service.AddAsync(collection);
                 await _service.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -56,24 +50,20 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: AppUsersController/Edit/5
+        public async Task<IActionResult> Edit(int id)
         {
-            var model = _service.Find(id);
+            var model = await _service.FindAsync(id);
             return View(model);
         }
 
-        // POST: BrandsController/Edit/5
+        // POST: AppUsersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Brand collection, IFormFile? Logo)
+        public async Task<ActionResult> EditAsync(int id, AppUser collection)
         {
             try
             {
-                if (Logo is not null)
-                {
-                    collection.Logo = await FileHelper.FileLoaderAsync(Logo, "Brands/");
-                }
                 _service.Update(collection);
                 await _service.SaveAsync();
                 return RedirectToAction(nameof(Index));
@@ -84,17 +74,17 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
             }
         }
 
-        // GET: BrandsController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: AppUsersController/Delete/5
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _service.FindAsync(id);
             return View(model);
         }
 
-        // POST: BrandsController/Delete/5
+        // POST: AppUsersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Brand collection)
+        public ActionResult Delete(int id, AppUser collection)
         {
             try
             {
