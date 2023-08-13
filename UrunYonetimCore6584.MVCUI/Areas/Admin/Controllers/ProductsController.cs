@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using UrunYonetimCore6584.Core.Entities;
+using UrunYonetimCore6584.MVCUI.Utils;
 using UrunYonetimCore6584.Service.Abstract;
 
 namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
@@ -44,16 +45,27 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
         // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product collection)
+        public async Task<ActionResult> CreateAsync(Product collection, IFormFile? Image, IFormFile? Image2, IFormFile? Image3)
         {
             try
             {
+                if (Image is not null)
+                    collection.Image = await FileHelper.FileLoaderAsync(Image, "Products/");
+                if (Image2 is not null)
+                    collection.Image2 = await FileHelper.FileLoaderAsync(Image2, "Products/");
+                if (Image3 is not null)
+                    collection.Image3 = await FileHelper.FileLoaderAsync(Image3, "Products/");
+                await _service.AddAsync(collection);
+                await _service.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception hata)
             {
-                return View();
+                ModelState.AddModelError("", "Hata Oluştu!" + hata.Message);
             }
+            ViewBag.BrandId = new SelectList(_serviceBrand.GetAll(), "Id", "Name");
+            ViewBag.CategoryId = new SelectList(_serviceCategory.GetAll(), "Id", "Name");
+            return View();
         }
 
         // GET: ProductsController/Edit/5
@@ -65,7 +77,7 @@ namespace UrunYonetimCore6584.MVCUI.Areas.Admin.Controllers
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Product collection, IFormFile? Image, IFormFile? Image2, IFormFile? Image3)
         {
             try
             {

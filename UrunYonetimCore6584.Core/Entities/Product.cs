@@ -6,19 +6,19 @@ namespace UrunYonetimCore6584.Core.Entities
     public class Product : IEntity
     {
         public int Id { get; set; } // entityframework bu id değerini otomatik olarak primary key ve otomatik artan sayı olarak veritabanında ayarlayacak
-        [DisplayName("Ürün Adı"), Required]
+        [DisplayName("Ürün Adı"), Required(ErrorMessage = "{0} Boş Bırakılamaz!")]
         public string Name { get; set; }
         [DisplayName("Açıklama")]
         public string? Description { get; set; }
-        [StringLength(50), DisplayName("Marka")]
+        [DisplayName("Marka")]
         public int BrandId { get; set; }
         [DisplayName("Durum")]
         public bool IsActive { get; set; }
         [DisplayName("Anasayfa")]
         public bool IsHome { get; set; }
-        [DisplayName("Stok")]
+        [DisplayName("Stok"), Required(ErrorMessage = "{0} Boş Bırakılamaz!")]
         public int Stock { get; set; }
-        [DisplayName("Ürün Fiyatı")]
+        [DisplayName("Ürün Fiyatı"), Required(ErrorMessage = "{0} Boş Bırakılamaz!")]
         public decimal Price { get; set; }
         [DisplayName("Resim 1")]
         public string? Image { get; set; }
